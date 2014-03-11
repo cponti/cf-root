@@ -1,0 +1,38 @@
+cf-root Specification
+=====================
+
+/cf-root is a file server repository and it contains all configuration files 
+that must be copied to the nodes.
+
+You can place brocken symbolic links in the /cf-root directory; updatenodes.sh
+transfers the the symbolic link.
+
+A file in the file server repository can either be sent to all nodes or to a 
+specific host name. To associate a file with a specific host name add a 
+._hostname extension to the file - the file will only be transferred to the 
+node corresponding to that host name. During file transfer the ._hostname 
+extension is removed. The ._hostname extension must come at the end of the 
+file name.
+
+Permission and ownership in /cf-root will be inherit on the node.
+
+If you add or modify a file in /cf-root then you must run the following command 
+immediately after:
+
+  # updatenodes.sh -u -v
+
+Only new or modified files will be copied to the node.
+
+This command line is also invoke every night via crontab file.
+
+  # crontab -l
+
+  # Min           Hour    Day     Month   Day     Command
+  #                       of              of
+  #                       Month           Week
+  #-----------------------------------------------------------------------------
+  # cf-root.cf update
+  #------------------------------------------------------------------------------
+  10            09      *       *       *       /usr/local/sbin/nodeupdate.sh > /dev/null
+
+cponti@cscs.ch / 11 March 2014
